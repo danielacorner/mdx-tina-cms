@@ -3,11 +3,7 @@ import { graphql, Link } from "gatsby"
 import React from "react"
 
 import { useLocalJsonForm } from "gatsby-tinacms-json"
-import {
-  useLocalRemarkForm,
-  RemarkCreatorPlugin,
-  DeleteAction,
-} from "gatsby-tinacms-remark"
+import { RemarkCreatorPlugin, DeleteAction } from "gatsby-tinacms-remark"
 import { withPlugin } from "tinacms"
 import styled from "styled-components/macro"
 import { Divider, Button } from "@material-ui/core"
@@ -58,12 +54,6 @@ function HomePage({ data, location, isEditing, setIsEditing }) {
   //     },
   //   ],
   // }
-
-  // const [allMarkdownRemark] = useLocalRemarkForm(data.allMarkdownRemark)
-  // const [allMarkdownRemark] = useLocalRemarkForm(
-  //   data.allMarkdownRemark,
-  //   AllDecksForm
-  // )
 
   const allDecks = data.allMarkdownRemark.nodes
   console.log("⚡🚨: HomePage -> allDecks", allDecks)

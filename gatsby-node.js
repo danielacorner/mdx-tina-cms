@@ -36,8 +36,9 @@ exports.createPages = async ({ graphql, actions }) => {
     const previous = index === decks.length - 1 ? null : decks[index + 1].node
     const next = index === 0 ? null : decks[index - 1].node
     if (slug) {
+      const path = `/decks/${slug}`
       createPage({
-        path: slug,
+        path,
         component: deckComponent,
         context: {
           previous,
@@ -52,15 +53,15 @@ exports.createPages = async ({ graphql, actions }) => {
   })
 }
 
-exports.onCreateNode = ({ node, actions, getNode }) => {
-  const { createNodeField } = actions
+// exports.onCreateNode = ({ node, actions, getNode }) => {
+//   const { createNodeField } = actions
 
-  if (node.internal.type === `MarkdownRemark`) {
-    const value = createFilePath({ node, getNode })
-    createNodeField({
-      name: `slug`,
-      node,
-      value,
-    })
-  }
-}
+//   if (node.internal.type === `MarkdownRemark`) {
+//     const value = createFilePath({ node, getNode })
+//     createNodeField({
+//       name: `slug`,
+//       node,
+//       value,
+//     })
+//   }
+// }

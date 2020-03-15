@@ -36,10 +36,6 @@ function DeckTemplate({
     console.log("TODO")
   }
 
-  const allDecks = data.allMarkdownRemark.nodes
-  console.log("⚡🚨: DeckTemplate -> allDecks", allDecks)
-  // const thisDeck = allDecks.find()
-
   return (
     <>
       <ControlsSection
@@ -83,21 +79,10 @@ export default inlineRemarkForm(DeckTemplate, DeckPageForm)
 
 export const pageQuery = graphql`
   query DeckBySlug($slug: String!) {
-    # allMarkdownRemark {
-    #   nodes {
-    #     frontmatter {
-    #       title
-    #     }
-    #     rawMarkdownBody
-    #     html
-    #     ...TinaRemark
-    #   }
-    # }
-    markdownRemark(fileRelativePath: { in: [$slug] }) {
-      id
-      excerpt(pruneLength: 160)
-      html
+    markdownRemark(frontmatter: { slug: { eq: $slug } }) {
       ...TinaRemark
+      html
+      rawMarkdownBody
       frontmatter {
         title
         date(formatString: "MMMM DD, YYYY")
