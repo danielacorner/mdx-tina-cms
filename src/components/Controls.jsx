@@ -1,6 +1,7 @@
 import React from "react"
 import { Button } from "@material-ui/core"
 import styled from "styled-components/macro"
+import { navigate } from "gatsby"
 
 const CONTROLS_HEIGHT = 20
 
@@ -24,11 +25,19 @@ export default function ControlsSection({
   return (
     <ControlsStyles className="controls">
       <div className="btnsWrapper">
-        <Button variant="contained" color="primary" onClick={handleEdit}>
-          {isEditing ? "Preview" : "Edit"}
+        <Button
+          variant="contained"
+          onClick={() => {
+            navigate("/")
+          }}
+        >
+          🏠 Home
         </Button>
-        <Button variant="contained" color="primary" onClick={handleBuild}>
-          Build
+        <Button variant="contained" color="primary" onClick={handleEdit}>
+          {isEditing ? "🔍 Preview" : "✏ Edit"}
+        </Button>
+        <Button variant="contained" onClick={handleBuild}>
+          👷‍♀️ Build
         </Button>
       </div>
     </ControlsStyles>
