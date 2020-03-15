@@ -1,7 +1,13 @@
 import { useEffect, useRef } from "react"
 
 // https://usehooks.com/useEventListener/
-export function useEventListener(eventName, handler, element = window) {
+const isWindowAvailable = typeof window !== `undefined`
+const windowIfAvailable = isWindowAvailable ? window : null
+export function useEventListener(
+  eventName,
+  handler,
+  element = windowIfAvailable
+) {
   // Create a ref that stores handler
   const savedHandler = useRef()
 
