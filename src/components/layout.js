@@ -6,8 +6,7 @@ import { withPlugin } from "tinacms"
 import { createRemarkButton } from "gatsby-tinacms-remark"
 import slugify from "slugify"
 
-const Layout = () => {
-  const { location, title, children } = this.props
+const Layout = ({ location, title, children }) => {
   const rootPath = `${__PATH_PREFIX__}/`
   let header
 
