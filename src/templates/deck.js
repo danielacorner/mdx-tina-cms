@@ -7,7 +7,11 @@ import Deck from "../components/Deck"
 import { Wysiwyg } from "@tinacms/fields"
 import { TinaField } from "@tinacms/form-builder"
 import { inlineRemarkForm } from "gatsby-tinacms-remark"
+import styled from "styled-components/macro"
 
+const DeckStyles = styled.div`
+  overflow: hidden;
+`
 function DeckTemplate({
   data,
   location,
@@ -37,7 +41,7 @@ function DeckTemplate({
   }
 
   return (
-    <>
+    <DeckStyles>
       <ControlsSection
         handleEdit={() => setIsEditing(p => !p)}
         isEditing={isEditing}
@@ -56,7 +60,7 @@ function DeckTemplate({
           deckData={data.markdownRemark.rawMarkdownBody}
         />
       )}
-    </>
+    </DeckStyles>
   )
 }
 // 1. Define the form config
