@@ -35,19 +35,20 @@ exports.createPages = async ({ graphql, actions }) => {
 
     const previous = index === decks.length - 1 ? null : decks[index + 1].node
     const next = index === 0 ? null : decks[index - 1].node
-
-    createPage({
-      path: slug,
-      component: deckComponent,
-      context: {
-        previous,
-        next,
-        slug,
-        title,
-        rawMarkdownBody,
-        html,
-      },
-    })
+    if (slug) {
+      createPage({
+        path: slug,
+        component: deckComponent,
+        context: {
+          previous,
+          next,
+          slug,
+          title,
+          rawMarkdownBody,
+          html,
+        },
+      })
+    }
   })
 }
 
