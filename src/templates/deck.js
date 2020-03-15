@@ -51,7 +51,10 @@ function DeckTemplate({
           ></section>
         </TinaField>
       ) : (
-        <Deck location={location} deckData={data.markdownRemark.html} />
+        <Deck
+          location={location}
+          deckData={data.markdownRemark.rawMarkdownBody}
+        />
       )}
     </>
   )

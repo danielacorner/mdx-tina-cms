@@ -1,7 +1,8 @@
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 import styled from "styled-components/macro"
 import { useEventListener } from "../utils/customHooks"
 import { useSwipeable } from "react-swipeable"
+import { navigate } from "gatsby"
 
 const SlideStyles = styled.div`
   height: 100vh;
@@ -24,10 +25,21 @@ export default function Deck({ deckData, location, ...props }) {
   const slides = deckDataDecoded.split("---")
   console.log("⚡🚨: Deck -> slides", slides)
 
-  const [slideIndex, setSlideIndex] = useState(0)
+  const indexFromHash = location.hash && location.hash.slice(1)
+  console.log("⚡🚨: Deck -> indexFromHash", indexFromHash)
+  const [slideIndex, setSlideIndex] = useState(Number(indexFromHash) || 0)
 
-  const stepBack = () => setSlideIndex(slideIndex - 1)
-  const stepForward = () => setSlideIndex(slideIndex + 1)
+  const stepBack = () => setSlideIndex(Math.max(0, slideIndex - 1))
+  const stepForward = () =>
+    setSlideIndex(Math.min(slides.length - 1, slideIndex + 1))
+
+  // sync the hash with the slide index
+  useEffect(() => {
+    console.log("⚡🚨: Deck -> location", location)
+    const { pathname, hash } = location
+    console.log("⚡🚨: Deck -> hash", hash)
+    navigate(`${pathname}#${slideIndex}`, { replace: true })
+  }, [slideIndex])
 
   const handleKeyDown = event => {
     console.log("⚡🚨: handleKeyDown -> event", event)
