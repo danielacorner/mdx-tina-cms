@@ -79,6 +79,7 @@ const Layout = () => {
  * Registering this plugin reveals the `+` button in
  * the sidebar.
  */
+
 const CreatePostPlugin = createRemarkButton({
   /**
    * Clicking the `+` button reveals a lost of content
@@ -110,7 +111,6 @@ const CreatePostPlugin = createRemarkButton({
     return {
       title: form.title,
       date: new Date(),
-      description: "",
     }
   },
   /**

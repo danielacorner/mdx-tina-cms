@@ -1,64 +1,65 @@
-// const path = require(`path`)
-// const { createFilePath } = require(`gatsby-source-filesystem`)
+const path = require(`path`)
+const { createFilePath } = require(`gatsby-source-filesystem`)
 
-// exports.createPages = async ({ graphql, actions }) => {
-//   const { createPage } = actions
+exports.createPages = async ({ graphql, actions }) => {
+  const { createPage } = actions
 
-//   const blogPost = path.resolve(`./src/templates/blog-post.js`)
-//   const result = await graphql(
-//     `
-//       {
-//         allMarkdownRemark(
-//           sort: { fields: [frontmatter___date], order: DESC }
-//           limit: 1000
-//         ) {
-//           edges {
-//             node {
-//               fields {
-//                 slug
-//               }
-//               frontmatter {
-//                 title
-//               }
-//             }
-//           }
-//         }
-//       }
-//     `
-//   )
+  const deckComponent = path.resolve(`./src/templates/deck.js`)
+  const result = await graphql(
+    `
+      {
+        allMarkdownRemark(sort: { fields: [frontmatter___date], order: DESC }) {
+          nodes {
+            frontmatter {
+              slug
+              title
+            }
+            rawMarkdownBody
+            html
+          }
+        }
+      }
+    `
+  )
 
-//   if (result.errors) {
-//     throw result.errors
-//   }
+  if (result.errors) {
+    throw result.errors
+  }
 
-//   // Create blog posts pages.
-//   const posts = result.data.allMarkdownRemark.edges
+  // Create decks pages.
+  const decks = result.data.allMarkdownRemark.nodes
 
-//   posts.forEach((post, index) => {
-//     const previous = index === posts.length - 1 ? null : posts[index + 1].node
-//     const next = index === 0 ? null : posts[index - 1].node
+  decks.forEach((deck, index) => {
+    const { frontmatter, rawMarkdownBody, html } = deck
+    const { slug, title } = frontmatter
 
-//     createPage({
-//       path: post.node.fields.slug,
-//       component: blogPost,
-//       context: {
-//         slug: post.node.fields.slug,
-//         previous,
-//         next,
-//       },
-//     })
-//   })
-// }
+    const previous = index === decks.length - 1 ? null : decks[index + 1].node
+    const next = index === 0 ? null : decks[index - 1].node
 
-// exports.onCreateNode = ({ node, actions, getNode }) => {
-//   const { createNodeField } = actions
+    createPage({
+      path: slug,
+      component: deckComponent,
+      context: {
+        previous,
+        next,
+        slug,
+        title,
+        rawMarkdownBody,
+        html,
+      },
+    })
+  })
+}
 
-//   if (node.internal.type === `MarkdownRemark`) {
-//     const value = createFilePath({ node, getNode })
-//     createNodeField({
-//       name: `slug`,
-//       node,
-//       value,
-//     })
-//   }
-// }
+exports.onCreateNode = ({ node, actions, getNode }) => {
+  const { createNodeField } = actions
+
+  if (node.internal.type === `MarkdownRemark`) {
+    const value = createFilePath({ node, getNode })
+    createNodeField({
+      name: `slug`,
+      node,
+      value,
+    })
+  }
+}

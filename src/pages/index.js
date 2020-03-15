@@ -79,12 +79,12 @@ function HomePage({ data, location, isEditing, setIsEditing }) {
           const deckPath = fileRelativePath.split("/")[4]
           console.log("⚡🚨: HomePage -> deckPath", deckPath)
           return (
-            <>
-              <Link to={`/${deckPath}`}>
-                <DeckListItem key={title} title={title} />
+            <React.Fragment key={title}>
+              <Link to={`/decks/${deckPath}`}>
+                <DeckListItem title={title} />
               </Link>
               <Divider />
-            </>
+            </React.Fragment>
           )
         })}
       </ul>
@@ -96,13 +96,16 @@ const CreateDeckPlugin = new RemarkCreatorPlugin({
   label: "Create Deck",
   filename: form => {
     const slug = form.title.replace(/\s+/, "-").toLowerCase()
-
-    return `content/blog/${slug}/index.md`
+    return `content/decks/markdown/${slug}/index.md`
   },
-  frontmatter: form => ({
-    title: form.title,
-    date: new Date(),
-  }),
+  frontmatter: form => {
+    const slug = form.title.replace(/\s+/, "-").toLowerCase()
+    return {
+      title: form.title,
+      slug,
+      date: new Date(),
+    }
+  },
   actions: [DeleteAction],
   fields: [
     { name: "title", label: "Title", component: "text", required: true },

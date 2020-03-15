@@ -1,6 +1,6 @@
 import { graphql, navigate } from "gatsby"
 
-import React, { useState } from "react"
+import React from "react"
 
 import ControlsSection from "../components/Controls"
 import Deck from "../components/Deck"
@@ -8,7 +8,16 @@ import { Wysiwyg } from "@tinacms/fields"
 import { TinaField } from "@tinacms/form-builder"
 import { inlineRemarkForm } from "gatsby-tinacms-remark"
 
-function DeckEditor({ data, location, isEditing, setIsEditing }) {
+function DeckTemplate({
+  data,
+  location,
+  isEditing,
+  setIsEditing,
+  pageContext,
+}) {
+  const { slug, title, rawMarkdownBody, html } = pageContext
+  console.log("⚡🚨: DeckTemplate -> pageContext", pageContext)
+
   console.log("⚡🚨: data", data)
   // const parsed = qs.parse(window.location.search);
   // https://github.com/ReactTraining/react-router/blob/master/packages/react-router/docs/api/hooks.md#uselocation
@@ -28,7 +37,8 @@ function DeckEditor({ data, location, isEditing, setIsEditing }) {
   }
 
   const allDecks = data.allMarkdownRemark.nodes
-  const thisDeck = allDecks.find()
+  console.log("⚡🚨: DeckTemplate -> allDecks", allDecks)
+  // const thisDeck = allDecks.find()
 
   return (
     <>
@@ -69,19 +79,50 @@ const DeckPageForm = {
   ],
 }
 
-export default inlineRemarkForm(DeckEditor, DeckPageForm)
+export default inlineRemarkForm(DeckTemplate, DeckPageForm)
 
 export const pageQuery = graphql`
-  query {
-    allMarkdownRemark {
-      nodes {
-        frontmatter {
-          title
-        }
-        rawMarkdownBody
-        html
-        ...TinaRemark
+  query DeckBySlug($slug: String!) {
+    # allMarkdownRemark {
+    #   nodes {
+    #     frontmatter {
+    #       title
+    #     }
+    #     rawMarkdownBody
+    #     html
+    #     ...TinaRemark
+    #   }
+    # }
+    markdownRemark(fileRelativePath: { in: [$slug] }) {
+      id
+      excerpt(pruneLength: 160)
+      html
+      ...TinaRemark
+      frontmatter {
+        title
+        date(formatString: "MMMM DD, YYYY")
       }
     }
   }
 `
+
+//   query BlogPostBySlug($slug: String!) {
+//     site {
+//       siteMetadata {
+//         title
+//         author
+//       }
+//     }
+//     markdownRemark(fields: { slug: { eq: $slug } }) {
+//       id
+//       excerpt(pruneLength: 160)
+//       html
+//       ...TinaRemark
+//       frontmatter {
+//         title
+//         date(formatString: "MMMM DD, YYYY")
+//         description
+//       }
+//     }
+//   }
+// `

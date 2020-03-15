@@ -1,8 +1,9 @@
 ---
-title: test test 123
-date: 2020-03-15T21:35:36.960Z
+title: hi
+slug: hi
+date: 2020-03-15T22:00:23.239Z
 ---
-test test 123
+hi
   ---
   This is a new slide.
   ---
