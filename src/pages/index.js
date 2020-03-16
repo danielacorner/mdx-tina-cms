@@ -41,7 +41,9 @@ function HomePage({ data }) {
       <ul>
         {allDecks
           .sort(
-            (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
+            (a, b) =>
+              new Date(b.frontmatter.date).getTime() -
+              new Date(a.frontmatter.date).getTime()
           )
           .map(deck => {
             const {
@@ -98,6 +100,7 @@ export const pageQuery = graphql`
         ...TinaRemark
         frontmatter {
           title
+          date
         }
         rawMarkdownBody
         html
