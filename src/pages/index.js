@@ -39,21 +39,25 @@ function HomePage({ data }) {
   return (
     <IndexStyles>
       <ul>
-        {allDecks.map(deck => {
-          const {
-            fileRelativePath,
-            frontmatter: { title },
-          } = deck
-          const deckPath = fileRelativePath.split("/")[4]
-          return (
-            <React.Fragment key={title}>
-              <Link to={`/decks/${deckPath}`}>
-                <DeckListItem title={title} />
-              </Link>
-              <Divider />
-            </React.Fragment>
+        {allDecks
+          .sort(
+            (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
           )
-        })}
+          .map(deck => {
+            const {
+              fileRelativePath,
+              frontmatter: { title },
+            } = deck
+            const deckPath = fileRelativePath.split("/")[4]
+            return (
+              <React.Fragment key={title}>
+                <Link to={`/decks/${deckPath}`}>
+                  <DeckListItem title={title} />
+                </Link>
+                <Divider />
+              </React.Fragment>
+            )
+          })}
       </ul>
     </IndexStyles>
   )
