@@ -29,34 +29,12 @@ const IndexStyles = styled.div`
   }
 `
 
-function HomePage({ data, location, isEditing, setIsEditing }) {
-  console.log("⚡🚨: HomePage -> data", data)
-  // const parsed = qs.parse(window.location.search);
-  // https://github.com/ReactTraining/react-router/blob/master/packages/react-router/docs/api/hooks.md#uselocation
-  // console.log("⚡🚨: parsed", parsed);
+function HomePage({ data }) {
   const handleBuild = () => {
     console.log("TODO")
   }
-  // const AllDecksForm = {
-  //   label: "Decks",
-  //   fields: [
-  //     {
-  //       label: "Title",
-  //       name: "frontmatter.title",
-  //       description: "Enter the title of the deck here",
-  //       component: "text",
-  //     },
-  //     {
-  //       label: "Slides",
-  //       name: "rawMarkdownBody",
-  //       description: "Enter the slides content here",
-  //       component: "textarea",
-  //     },
-  //   ],
-  // }
 
   const allDecks = data.allMarkdownRemark.nodes
-  console.log("⚡🚨: HomePage -> allDecks", allDecks)
 
   return (
     <IndexStyles>
@@ -67,7 +45,6 @@ function HomePage({ data, location, isEditing, setIsEditing }) {
             frontmatter: { title },
           } = deck
           const deckPath = fileRelativePath.split("/")[4]
-          console.log("⚡🚨: HomePage -> deckPath", deckPath)
           return (
             <React.Fragment key={title}>
               <Link to={`/decks/${deckPath}`}>
@@ -103,8 +80,9 @@ const CreateDeckPlugin = new RemarkCreatorPlugin({
   body: form => `${form.title}
   ---
   This is a new slide.
-  ---
-  this is another slide!`,
+  ***
+  this is another slide!
+  `,
 })
 
 export default withPlugin(HomePage, CreateDeckPlugin)

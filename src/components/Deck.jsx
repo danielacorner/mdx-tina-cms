@@ -3,6 +3,7 @@ import styled from "styled-components/macro"
 import { useEventListener } from "../utils/customHooks"
 import { useSwipeable } from "react-swipeable"
 import { navigate } from "gatsby"
+import Markdown from "markdown-to-jsx"
 
 const SlideStyles = styled.div`
   height: 100vh;
@@ -16,17 +17,14 @@ const SlideStyles = styled.div`
   user-select: none;
 `
 
-export default function Deck({ deckData, location, ...props }) {
-  console.log("⚡🚨: Deck -> props", props)
-
+export default function Deck({ deckData, location }) {
   const deckDataFromLocation = location && location.search.slice(1)
   const deckDataDecoded = deckData || decodeURI(deckDataFromLocation)
 
-  const slides = deckDataDecoded.split("---")
-  console.log("⚡🚨: Deck -> slides", slides)
+  const separators = ["---", "\\*\\*\\*"]
+  const slides = deckDataDecoded.split(new RegExp(separators.join("|"), "g"))
 
   const indexFromHash = location.hash && location.hash.slice(1)
-  console.log("⚡🚨: Deck -> indexFromHash", indexFromHash)
   const [slideIndex, setSlideIndex] = useState(Number(indexFromHash) || 0)
 
   const stepBack = () => setSlideIndex(Math.max(0, slideIndex - 1))
@@ -35,14 +33,11 @@ export default function Deck({ deckData, location, ...props }) {
 
   // sync the hash with the slide index
   useEffect(() => {
-    console.log("⚡🚨: Deck -> location", location)
-    const { pathname, hash } = location
-    console.log("⚡🚨: Deck -> hash", hash)
+    const { pathname } = location
     navigate(`${pathname}#${slideIndex}`, { replace: true })
   }, [slideIndex])
 
   const handleKeyDown = event => {
-    console.log("⚡🚨: handleKeyDown -> event", event)
     if (event.key === "ArrowRight") {
       stepForward()
     }
@@ -58,14 +53,16 @@ export default function Deck({ deckData, location, ...props }) {
     preventDefaultTouchmoveEvent: true,
   }
   const swipeHandlers = useSwipeable({
-    onSwipedLeft: stepBack,
-    onSwipedRight: stepForward,
+    onSwipedLeft: stepForward,
+    onSwipedRight: stepBack,
     ...swipeConfig,
   })
 
   return (
     <div {...swipeHandlers}>
-      <SlideStyles dangerouslySetInnerHTML={{ __html: slides[slideIndex] }} />
+      <SlideStyles>
+        <Markdown>{slides[slideIndex]}</Markdown>
+      </SlideStyles>
     </div>
   )
 }

@@ -1,4 +1,4 @@
-import { graphql, navigate } from "gatsby"
+import { graphql } from "gatsby"
 
 import React from "react"
 
@@ -12,6 +12,7 @@ import styled from "styled-components/macro"
 const DeckStyles = styled.div`
   overflow: hidden;
 `
+
 function DeckTemplate({
   data,
   location,
@@ -20,12 +21,6 @@ function DeckTemplate({
   pageContext,
 }) {
   const { slug, title, rawMarkdownBody, html } = pageContext
-  console.log("⚡🚨: DeckTemplate -> pageContext", pageContext)
-
-  console.log("⚡🚨: data", data)
-  // const parsed = qs.parse(window.location.search);
-  // https://github.com/ReactTraining/react-router/blob/master/packages/react-router/docs/api/hooks.md#uselocation
-  // console.log("⚡🚨: parsed", parsed);
 
   // TODO: use this to share links to decks
   // const [value, setValue] = useState(decodeURI(location.search.slice(1))) // slice off the question mark
@@ -48,12 +43,7 @@ function DeckTemplate({
         handleBuild={handleBuild}
       ></ControlsSection>
       {isEditing ? (
-        <TinaField name="rawMarkdownBody" Component={Wysiwyg}>
-          <section
-            className="content"
-            dangerouslySetInnerHTML={{ __html: data.markdownRemark.html }}
-          ></section>
-        </TinaField>
+        <TinaField name="rawMarkdownBody" Component={Wysiwyg} />
       ) : (
         <Deck
           location={location}
